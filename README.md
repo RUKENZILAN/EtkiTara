@@ -108,10 +108,32 @@ python -m unittest discover -s tests -v
 
 ## Normalizasyon hakkında
 
-Yerleşik sözlük küçüktür ve örnek amaçlıdır; `core.py` içindeki `_RAW_SYNONYMS` listesini genişletin.
+Yerleşik sözlük küçüktür ve örnek amaçlıdır; `core.py` içindeki `_RAW_SYNONYMS` listesini genişletin ve düzenli güncelleyin (bkz. "Sözlük bakımı ve güncelleme").
 Sözlükte bulunmayan bir ad için sonuç çıkmıyorsa adı İngilizce etkin madde adıyla yazın.
 Model önerileri doğrulanmamıştır ve yalnızca arama terimi üretmek için kullanılır; sonuç değerlendirmesine girmez.
 RxNorm eşleşme eşiği (`RXNORM_MIN_SCORE`) gerçek verilerle ayarlanmalıdır.
+
+## Sözlük bakımı ve güncelleme
+
+Yerleşik sözlük (`core.py` içindeki `_RAW_SYNONYMS`, yaklaşık 130 giriş) elle derlenmiş bir **başlangıç setidir;
+kapsamlı değildir ve durağan kalamaz.** Yeni ilaçlar, markalar ve takviye ürünleri sürekli çıkar; sözlük
+güncellenmezse uygulama sessizce zayıf sonuç verir:
+
+- Sözlükte olmayan bir ad için arama çoğunlukla boş döner. Bu, etkileşim olmadığı anlamına gelmez.
+- Hatalı bir giriş, yanlış maddenin literatürünü getirir ve bunu fark etmek zordur.
+
+**Yeni giriş eklerken**
+
+1. Anahtar Türkçe yazımdır (büyük/küçük harf ve Türkçe karakter farkı otomatik yok sayılır); değer, İngilizce
+   etkin madde adının (INN) başta olduğu listedir. Bitkilerde Latince tür adını da ekleyin.
+2. İngilizce adı bir referansla doğrulayın (örn. RxNorm, WHO INN listesi, MeSH). Tahminle eklemeyin.
+3. Bir adın birden fazla maddeyi anlatabildiği durumlara dikkat edin ("süt otu" ile "süt" gibi). Belirsiz ya da
+   kısa (5 harften kısa) anahtarlar kısmi eşleşmede zaten kullanılmaz, ama tam eşleşmede yanlış sonuç verebilir.
+4. Eklenen girişler için `tests/test_core.py` içine bir test ekleyin.
+5. Mümkünse bir eczacı veya klinik farmakolog yeni girişleri gözden geçirsin.
+
+**Önerilen bakım düzeni:** sözlüğü kod dışına (JSON/CSV) taşıyın, her girişe kaynak ve ekleme tarihi ekleyin ve
+düzenli aralıklarla (örn. her ay veya yeni sürümden önce) gözden geçirin. Bu iş yol haritasında C1 maddesidir.
 
 ## Önemli sınırlar
 
@@ -181,7 +203,7 @@ Etki, "sonucun güvenilirliğine ve kullanılabilirliğine katkı" anlamındadı
 
 | # | Yapılabilecek | Neden | Efor |
 |---|---|---|---|
-| C1 | Sözlüğü genişletmek: TİTCK ilaç listesi, ATC kodları, marka → etkin madde, tuz/form eşleştirme | Sözlükte olmayan ad bugün sessizce zayıf sonuç verir | M |
+| C1 | Sözlüğü genişletmek ve **düzenli güncellemek**: TİTCK ilaç listesi, ATC kodları, marka → etkin madde, tuz/form eşleştirme; sözlüğü kod dışına (JSON/CSV) taşıyıp her girişe kaynak ve tarih eklemek | Sözlükte olmayan ad bugün sessizce zayıf sonuç verir; yeni ürünler çıktıkça sözlük eskir | M |
 | C2 | **İki adımlı akış**: önce eşleşme tablosu düzenlenebilir gösterilir, kullanıcı onaylar, sonra arama yapılır | Yanlış eşleşmeyi aramadan önce yakalar | M |
 | C3 | Yazım hatası düzeltme ve bulanık eşleşme (yalnızca sözlük içinde) | "greyfurt/greyfurut" gibi hatalar | S |
 | C4 | Bitkilerde Latince tür adı ve ekstrakt/standardizasyon alanları | "Sarı kantaron" ile standardize ekstrakt aynı risk profilinde değildir | M |
@@ -225,6 +247,7 @@ Etki, "sonucun güvenilirliğine ve kullanılabilirliğine katkı" anlamındadı
 - Yapay zekâ özeti kaynağı yanlış yorumlayabilir; bugün çıktı kodla doğrulanmıyor (bkz. B1).
 - Sözlük kısmi eşleşmeleri yanlış olabilir; bu yüzden işaretlenir ama engellenmez.
 - RxNorm yalnızca ilaçlar için kullanılır; besin ve takviyeler sözlük veya model önerisine kalır.
+- Madde adı sözlüğü küçüktür, elle derlenmiştir ve güncel tutulması gerekir; eksik veya eski girişler boş ya da yanlış sonuç doğurabilir (bkz. "Sözlük bakımı ve güncelleme").
 - Analiz başına en fazla 8 madde ve her çift için en fazla 8 kayıt.
 
 ## Lisans
