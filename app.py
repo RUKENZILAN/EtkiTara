@@ -7,7 +7,7 @@ from core import (
     unique_pairs, make_evidence_prompt, fold,
 )
 
-st.set_page_config(page_title="PharmaIntelligence AI", layout="wide")
+st.set_page_config(page_title="EtkiTara AI", layout="wide")
 
 DISCLAIMER = (
     "Bu uygulama yalnızca eğitim ve bilimsel bilgilendirme amaçlı geliştirilmiş bir MVP "
@@ -17,7 +17,7 @@ DISCLAIMER = (
     "ya da takviyelerinizi başlatmayınız, bırakmayınız veya dozlarını değiştirmeyiniz."
 )
 
-st.title("PharmaIntelligence AI")
+st.title("EtkiTara AI")
 st.subheader("İlaç, besin ve takviye etkileşim analizörü")
 st.warning(DISCLAIMER)
 st.caption(
@@ -189,7 +189,7 @@ if submitted:
 
     # 5) Rapor
     report = [
-        "# PharmaIntelligence AI - Etkileşim ön değerlendirmesi",
+        "# EtkiTara AI - Etkileşim ön değerlendirmesi",
         f"> {DISCLAIMER}",
         "",
         "## Girilen maddeler ve aranan terimler",
@@ -208,11 +208,11 @@ if submitted:
     st.download_button(
         "Tüm analiz raporunu indir",
         data="\n".join(report),
-        file_name="pharmaintelligence_etkilesim_raporu.md",
+        file_name="etkitara_etkilesim_raporu.md",
         mime="text/markdown",
         type="primary",
     )
 
 st.divider()
-st.caption("PharmaIntelligence AI MVP v0.4")
+st.caption("EtkiTara AI MVP v0.4")
 st.caption(DISCLAIMER)
