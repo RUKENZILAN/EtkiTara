@@ -1,4 +1,4 @@
-# PharmaIntelligence AI - MVP v0.4
+# EtkiTara AI - MVP v0.4
 
 > **Önemli uyarı:** Bu yazılım yalnızca eğitim ve bilimsel bilgilendirme amaçlı bir
 > prototiptir. **Tıbbi cihaz değildir; tıbbi tavsiye, tanı veya tedavi sunmaz.**
